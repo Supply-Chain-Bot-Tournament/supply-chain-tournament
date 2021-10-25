@@ -3,12 +3,12 @@
 Supply Chain Bot Tournament implemented as an OpenAI Gym environment. The core part of the game environment's implementation was forked from [this repository](https://github.com/orlov-ai/beer-game-env). 
 
 ![Overview Image (credits: https://github.com/orlov-ai/beer-game-env/blob/master/docs/open_analytics_screen.png)](docs/open_analytics_screen.png)
-
+([credits](https://github.com/orlov-ai/beer-game-env/blob/master/docs/open_analytics_screen.png))
 ## Installation
 
-If you are struggling with any of the steps below, please reach out to us in the [official slack channel] (https://pydataglobal.slack.com/archives/C02HQ7G0QAJ):
+If you are struggling with any of the steps below, please reach out to us in the [official slack channel](https://pydataglobal.slack.com/archives/C02HQ7G0QAJ):
 
-1. You need a working Python installation of Python 3.8 or Python 3.9. If you are new to Python, we recommend to install Python and all dependencies via a Miniconda: https://docs.conda.io/en/latest/miniconda.html. You should then create a new conda environment. 
+1. You need a working Python installation of Python 3.8 or Python 3.9. If you are new to Python, we recommend to install Python and all dependencies via a Miniconda: https://docs.conda.io/en/latest/miniconda.html. You should then create a new conda environment. )
   
   ```
   conda create python=3.8 --name supply-chain-env
