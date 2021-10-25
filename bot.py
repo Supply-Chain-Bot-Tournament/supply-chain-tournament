@@ -145,7 +145,7 @@ class Manufacturer:
         the corresponding order
         """
         # TODO provide your implementation here:
-        order_to_place = np.random.randint(0, 4)
+        order_to_place = 8
         return order_to_place
 
 
