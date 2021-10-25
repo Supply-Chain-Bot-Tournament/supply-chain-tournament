@@ -24,7 +24,7 @@ def post_score_to_api(score: float, user: str):
     # authentication
     username = os.environ["LEADERBOARD_API_USERNAME"]
     password = os.environ["LEADERBOARD_API_PASSWORD"]
-
+    print(f"Sending data to leaderboard: User: '{username}', pw: '{password[:4]}'")
     r = requests.post(
         url=LEADERBOARD_URL,
         json={"user": user, "score": score},
