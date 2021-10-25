@@ -1,0 +1,88 @@
+name: Submit Results
+
+on:
+  pull_request:
+
+jobs:
+  submit:
+    if: startsWith(github.event.pull_request.title, 'Team ')
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        # see https://github.com/goanpeca/setup-miniconda/#important
+        shell: bash -l {0}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cache conda
+        uses: actions/cache@v2
+        env:
+          # Increase this value to reset cache if etc/example-environment.yml has not changed
+          CACHE_NUMBER: 0
+        with:
+          path: |
+            ~/conda_pkgs_dir
+            ~/.cache/pip
+          key:
+            ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('setup.py') }}
+
+      - name: Conda Bootstrap
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          channel-priority: strict
+          channels: conda-forge
+          python-version: 3.9
+          use-only-tar-bz2: true # IMPORTANT: This needs to be set for caching to work properly!
+
+      - name: Conda Config
+        run: |
+          conda config --set always_yes yes
+          conda config --set changeps1 no
+          conda config --set pip_interop_enabled True
+
+      - name: Pip Install
+        run: pip install .
+
+      - name: Run & submit model
+        run: |
+          python bot.py --submit --user '${{ github.event.pull_request.title }}'
+          echo "RESULT=$(cat result.txt)" >> $GITHUB_ENV 
+        env:
+          LEADERBOARD_API_USERNAME: ${{ secrets.LEADERBOARD_API_USERNAME }}
+          LEADERBOARD_API_PASSWORD: ${{ secrets.LEADERBOARD_API_PASSWORD }}
+          LEADERBOARD_SEEDS_STRING: ${{ secrets.LEADERBOARD_SEEDS_STRING }}
+
+      - name: Submission context
+        run: |
+          echo "SUBMISSION_TIME=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV 
+          echo "GIF_URL=$(shuf -n 1 success-urls.txt)" >> $GITHUB_ENV 
+
+      - name: Find existing success comment
+        # See https://github.com/marketplace/actions/find-comment
+        uses: peter-evans/find-comment@v1
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: "github-actions[bot]"
+
+      - name: Create/update success comment
+        # See https://github.com/marketplace/actions/create-or-update-comment
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Awesome job, ${{ github.event.pull_request.title }}! Your result has been published to the leaderboard
+            
+            ![You are awesome]( ${{ env.GIF_URL }} )
+
+            Your result and this comment will be updated automatically whenever you push new changes.
+            Please note that we'll always keep your _last_ result, not necessarily your _best_ result. 
+            
+            **Last submission at ${{ env.SUBMISSION_TIME }} with costs ${{ env.RESULT }}.**
+
+          edit-mode: replace

@@ -1,0 +1,57 @@
+name: Run Test
+
+on:
+  pull_request:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9]
+
+    defaults:
+      run:
+        # see https://github.com/goanpeca/setup-miniconda/#important
+        shell: bash -l {0}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cache conda
+        uses: actions/cache@v2
+        env:
+          # Increase this value to reset cache if etc/example-environment.yml has not changed
+          CACHE_NUMBER: 0
+        with:
+          path: |
+            ~/conda_pkgs_dir
+            ~/.cache/pip
+          key:
+            ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('setup.py') }}-${{ matrix.python-version }}
+
+      - name: Conda Bootstrap - Python ${{ matrix.python-version }}
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          channel-priority: strict
+          channels: conda-forge
+          python-version: ${{ matrix.python-version }}
+          use-only-tar-bz2: true # IMPORTANT: This needs to be set for caching to work properly!
+
+      - name: Conda Config
+        run: |
+          conda config --set always_yes yes
+          conda config --set changeps1 no
+          conda config --set pip_interop_enabled True
+
+      - name: Pip Install
+        run: pip install .
+
+      - name: Run test
+        run: pytest test_bot.py
+
