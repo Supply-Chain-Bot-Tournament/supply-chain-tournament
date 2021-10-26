@@ -78,8 +78,8 @@ Do NOT modify any other files.
 ## Submitting to the Leaderboard
 
 In order to participate in the tournament, you should follow these steps:
-1. Once you're happy with the developed strategy, post your changes to a new branch in this repository  to trigger the evaluation and open a PR to merge to `main`
-2. GitHub Actions will take care of evaluating your implementation and post your results to the leaderboard
+1. Once you're happy with the developed strategy, post your changes to a new branch in this repository  to trigger the evaluation and open a PR with name "Team your_teamname" to merge to `main`
+2. GitHub Actions will take care of evaluating your implementation and post your results to the leaderboard (https://leaderboard-brewyonder.eu.live.external.byp.ai/)
 3. Update your branch as often as you like, but be aware that the most recent results will be updated to the leaderboard, irrespectively of the result
 
 Good luck and have fun!
