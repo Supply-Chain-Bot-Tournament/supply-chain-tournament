@@ -93,6 +93,7 @@ class Wholesaler:
         """
 
         # TODO provide your implementation here:
+
         order_to_place = np.random.randint(0, 4)
         return order_to_place
 
