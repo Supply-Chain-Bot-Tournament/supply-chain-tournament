@@ -226,6 +226,8 @@ def main(args):
 
     if args.submit:
         # get total costs and post results to leaderboard api
+        score_list = [run() for i in range(1, 21)]
+        score = sum(score_list)/ len(score_list)
         write_result_to_file(score=score, filename="result.txt")
         post_score_to_api(score=score, user=args.user)
 
