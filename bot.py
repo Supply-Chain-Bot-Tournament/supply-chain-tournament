@@ -22,7 +22,7 @@ The problem is that the agents don't know the current numbers of the stock level
 order/shipment exchange doesn't happen instantaneously but involves two turns of lead time. (Except Manufacturer that
 refills its supply with lead time of one turn). The same lead time is true for delivery of a previously ordered amount.
 For example, if the Retailer orders X amount on n-th turn, this information reaches the Wholesaler in two "days", i.e.
-on the (n+2)-th turn. Therefore, non-optimal orderings could  result in stock-outs or too many items hold, and
+on the (n+2)-th turn. Therefore, non-optimal orderings could result in stock-outs or too many items hold, and
 both conditions incur costs.
 
 Your goal is to implement a strategy for each of the four agents in such a way, that the costs are minimal after
@@ -36,9 +36,7 @@ solution!
 """
 import os
 from argparse import ArgumentParser
-from typing import Union, Optional, List
-
-import numpy as np
+from typing import Optional, List
 
 from supply_chain_env.envs.env import SupplyChainBotTournament
 from supply_chain_env.leaderboard import post_score_to_api, write_result_to_file

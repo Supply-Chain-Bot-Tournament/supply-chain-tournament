@@ -50,10 +50,10 @@ Last stockout cost:  [2. 0. 0. 0.]
 ```
 
 * A turn number is shown at the top - this can be interpreted as the number of days it has been since the tournament started.
-* The sequence is: retailer, wholesaler, distributor and manufacturer. So for `Stocks Levels (at the end of the turn)`, the stocks/inventory at the end of the turn  at the retailer is -1, at the wholesaler is 18, at the distributor is 17 and at the manufacturer is 19. A negative value signifies the number of units that got ordered but weren't available.
+* The sequence is: retailer, wholesaler, distributor and manufacturer. So for `Stocks Levels (at the end of the turn)`, the stocks/inventory at the end of the turn  at the retailer is -2, at the wholesaler is 18, at the distributor is 17 and at the manufacturer is 19. A negative value signifies the number of units that got ordered but weren't available.
 * `Stock Levels` - this is the stock or inventory level at each agent
 * `Orders Placed` -  this is the amount of order placed during this turn by the agent, i.e., the AI bot made this decision. There are two values for each agent. It is assumed that the order information also takes 2 days to reach upstream, so these are the orders placed by the agents day before yesterday and yesterday, respectively.
-* `Shipments Inbound` - these include the shipments which the agent placed earlier and are now expected to arrive in the near future. There are two values for each agent. "[[0, 2], [1, 1], [0, 3], [4, 1]]" would imply that no shipment is expected in 1 day at the retailer, a shipment of 2 units is expected at the retailer in 2 days, shipments of 1 unit each are expected at the wholesaler the next two days, no shipment is expected at the distributer in 1 day and a shipment of 3 units is expected at the distributer in 2 days, 4 new units are expected to be produced at the manufacturer in 1 day and 1 new unit is expected to be produced at the manufacturer in 2 days. Please note that these would match with the order placed the previous days.
+* `Shipments Inbound` - these include the shipments which the agent placed earlier and are now expected to arrive in the near future. There are two values for each agent. `[[0, 2], [1, 1], [0, 3], [4, 1]]` would imply that no shipment is expected in 1 day at the retailer, a shipment of 2 units is expected at the retailer in 2 days, shipments of 1 unit each are expected at the wholesaler the next two days, no shipment is expected at the distributer in 1 day and a shipment of 3 units is expected at the distributer in 2 days, 4 new units are expected to be produced at the manufacturer in 1 day and 1 new unit is expected to be produced at the manufacturer in 2 days. Please note that these would match with the order placed the previous days.
 * `Next Incoming Orders` - this is essentially the demand for each agent in the turn.
 * Each agents will have to incur some costs to holding and maintaining the inventory - called `holding cost` and the opportunity cost of losing out of on potential sales because enough stocks were not available to fulfil the demand - called `stockout cost`. The cumulative costs so far at each agent for these two costs are also shown after each day/turn.
 
@@ -78,7 +78,7 @@ Do NOT modify any other files.
 ## Submitting to the Leaderboard
 
 In order to participate in the tournament, you should follow these steps:
-1. Once you're happy with the developed strategy, post your changes to a new branch in this repository  to trigger the evaluation and open a PR with name "Team your_teamname" to merge to `main`
+1. Once you're happy with the developed strategy, post your changes to a new branch in this repository  to trigger the evaluation and open a PR with name "Team your_teamname" to merge to `master`
 2. GitHub Actions will take care of evaluating your implementation and post your results to the leaderboard (https://leaderboard-brewyonder.eu.live.external.byp.ai/)
 3. Update your branch as often as you like, but be aware that the most recent results will be updated to the leaderboard, irrespectively of the result
 
