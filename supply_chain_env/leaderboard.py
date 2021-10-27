@@ -8,7 +8,7 @@ from requests.auth import HTTPBasicAuth
 
 
 LEADERBOARD_URL = (
-    "https://leaderboard-brewyonder.eu.live.external.byp.ai/"
+    "https://leaderboard-brewyonder.eu.live.external.byp.ai/add-user-score"
 )
 
 
