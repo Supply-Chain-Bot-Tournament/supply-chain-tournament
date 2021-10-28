@@ -98,10 +98,10 @@ class Wholesaler:
         # TODO provide your implementation here:
 
         order_to_place = step_state["next_incoming_order"]
-        if step_state["current_stock"]+step_state["inbound_shipments"][0] < 15:
-            order_to_place += 5
-        if step_state["current_stock"]+step_state["inbound_shipments"][0] > 30:
-            order_to_place -= 5
+        if step_state["current_stock"]+step_state["inbound_shipments"][0] < 20:
+            order_to_place += 10
+        if step_state["current_stock"]+step_state["inbound_shipments"][0] > 20:
+            order_to_place -= 10
 
         return max(order_to_place, 0)
 
