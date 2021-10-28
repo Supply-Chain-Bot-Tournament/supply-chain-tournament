@@ -394,9 +394,9 @@ class SupplyChainBotTournament(gym.Env):
 
         # check if done
         if self.turn == self.n_turns - 1:
-            print(
-                f"\nTotal cost is: EUR {sum(self.cum_holding_cost + self.cum_stockout_cost)}"
-            )
+            # print(
+            #     f"\nTotal cost is: EUR {sum(self.cum_holding_cost + self.cum_stockout_cost)}"
+            # )
             self.done = True
         else:
             self.turn += 1
