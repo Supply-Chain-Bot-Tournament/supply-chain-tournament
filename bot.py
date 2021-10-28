@@ -68,7 +68,7 @@ class Retailer:
         if step_state["current_stock"]+step_state["inbound_shipments"][0] < 15:
             order_to_place += 5
         if step_state["current_stock"]+step_state["inbound_shipments"][0] > 30:
-            order_to_place -= 5
+            order_to_place -= 10
 
         return max(order_to_place, 0)
 
