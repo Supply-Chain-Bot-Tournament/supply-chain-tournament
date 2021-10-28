@@ -132,49 +132,49 @@ def create_agents() -> List:
     return [
         Retailer(
             # first condition
-            inbound_shipments_first_below=8,
+            inbound_shipments_first_below=4,
             inbound_shipments_second_below=0,
-            inbound_shipments_orders_inc=3,
+            inbound_shipments_orders_inc=2,
             # second condition
-            inbound_shipments_first_above=16,
+            inbound_shipments_first_above=8,
             inbound_shipments_second_above=0,
-            inbound_shipments_orders_dec=3,
+            inbound_shipments_orders_dec=2,
             # both days
             use_second_inbound=False,
         ),
         Wholesaler(
             # first condition
-            inbound_shipments_first_below=8,
+            inbound_shipments_first_below=4,
             inbound_shipments_second_below=0,
-            inbound_shipments_orders_inc=3,
+            inbound_shipments_orders_inc=2,
             # second condition
-            inbound_shipments_first_above=16,
+            inbound_shipments_first_above=8,
             inbound_shipments_second_above=0,
-            inbound_shipments_orders_dec=3,
+            inbound_shipments_orders_dec=2,
             # both days
             use_second_inbound=False,
         ),
         Distributor(
             # first condition
-            inbound_shipments_first_below=8,
+            inbound_shipments_first_below=4,
             inbound_shipments_second_below=0,
-            inbound_shipments_orders_inc=3,
+            inbound_shipments_orders_inc=2,
             # second condition
-            inbound_shipments_first_above=16,
+            inbound_shipments_first_above=8,
             inbound_shipments_second_above=0,
-            inbound_shipments_orders_dec=3,
+            inbound_shipments_orders_dec=2,
             # both days
             use_second_inbound=False,
         ),
         Manufacturer(
             # first condition
-            inbound_shipments_first_below=8,
+            inbound_shipments_first_below=4,
             inbound_shipments_second_below=0,
-            inbound_shipments_orders_inc=3,
+            inbound_shipments_orders_inc=2,
             # second condition
-            inbound_shipments_first_above=16,
+            inbound_shipments_first_above=8,
             inbound_shipments_second_above=0,
-            inbound_shipments_orders_dec=3,
+            inbound_shipments_orders_dec=2,
             # both days
             use_second_inbound=False,
         ),
