@@ -76,7 +76,7 @@ class Retailer:
 class Wholesaler:
     def get_action(self, step_state: dict) -> int:
         """
-        Compute order of the Wholesaler agent to send to the Distributor.
+        Compute order of pthe Wholesaler agent to send to the Distributor.
 
         Parameters
         ----------
