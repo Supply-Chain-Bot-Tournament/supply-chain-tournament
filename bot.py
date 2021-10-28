@@ -130,10 +130,54 @@ def create_agents() -> List:
     agent is Retailer, the second one is Wholesaler, etc.
     """
     return [
-        Retailer(),
-        Wholesaler(),
-        Distributor(),
-        Manufacturer(),
+        Retailer(
+            # first condition
+            inbound_shipments_first_below=15,
+            inbound_shipments_second_below=0,
+            inbound_shipments_orders_inc=5,
+            # second condition
+            inbound_shipments_first_above=30,
+            inbound_shipments_second_above=0,
+            inbound_shipments_orders_dec=5,
+            # both days
+            use_second_inbound=False,
+        ),
+        Wholesaler(
+            # first condition
+            inbound_shipments_first_below=15,
+            inbound_shipments_second_below=0,
+            inbound_shipments_orders_inc=5,
+            # second condition
+            inbound_shipments_first_above=30,
+            inbound_shipments_second_above=0,
+            inbound_shipments_orders_dec=5,
+            # both days
+            use_second_inbound=False,
+        ),
+        Distributor(
+            # first condition
+            inbound_shipments_first_below=15,
+            inbound_shipments_second_below=0,
+            inbound_shipments_orders_inc=5,
+            # second condition
+            inbound_shipments_first_above=30,
+            inbound_shipments_second_above=0,
+            inbound_shipments_orders_dec=5,
+            # both days
+            use_second_inbound=False,
+        ),
+        Manufacturer(
+            # first condition
+            inbound_shipments_first_below=15,
+            inbound_shipments_second_below=0,
+            inbound_shipments_orders_inc=5,
+            # second condition
+            inbound_shipments_first_above=30,
+            inbound_shipments_second_above=0,
+            inbound_shipments_orders_dec=5,
+            # both days
+            use_second_inbound=False,
+        ),
     ]
 
 
