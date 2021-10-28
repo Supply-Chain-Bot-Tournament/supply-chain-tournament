@@ -133,50 +133,50 @@ def create_agents() -> List:
         Retailer(
             # first condition
             inbound_shipments_first_below=15,
-            inbound_shipments_second_below=0,
-            inbound_shipments_orders_inc=5,
+            inbound_shipments_second_below=10,
+            inbound_shipments_orders_inc=7,
             # second condition
             inbound_shipments_first_above=30,
-            inbound_shipments_second_above=0,
-            inbound_shipments_orders_dec=5,
+            inbound_shipments_second_above=10,
+            inbound_shipments_orders_dec=7,
             # both days
-            use_second_inbound=False,
+            use_second_inbound=True,
         ),
         Wholesaler(
             # first condition
             inbound_shipments_first_below=15,
-            inbound_shipments_second_below=0,
-            inbound_shipments_orders_inc=5,
+            inbound_shipments_second_below=10,
+            inbound_shipments_orders_inc=7,
             # second condition
             inbound_shipments_first_above=30,
-            inbound_shipments_second_above=0,
-            inbound_shipments_orders_dec=5,
+            inbound_shipments_second_above=10,
+            inbound_shipments_orders_dec=7,
             # both days
-            use_second_inbound=False,
+            use_second_inbound=True,
         ),
         Distributor(
             # first condition
             inbound_shipments_first_below=15,
-            inbound_shipments_second_below=0,
-            inbound_shipments_orders_inc=5,
+            inbound_shipments_second_below=10,
+            inbound_shipments_orders_inc=7,
             # second condition
             inbound_shipments_first_above=30,
-            inbound_shipments_second_above=0,
-            inbound_shipments_orders_dec=5,
+            inbound_shipments_second_above=10,
+            inbound_shipments_orders_dec=7,
             # both days
-            use_second_inbound=False,
+            use_second_inbound=True,
         ),
         Manufacturer(
             # first condition
             inbound_shipments_first_below=15,
-            inbound_shipments_second_below=0,
-            inbound_shipments_orders_inc=5,
+            inbound_shipments_second_below=10,
+            inbound_shipments_orders_inc=7,
             # second condition
             inbound_shipments_first_above=30,
-            inbound_shipments_second_above=0,
-            inbound_shipments_orders_dec=5,
+            inbound_shipments_second_above=10,
+            inbound_shipments_orders_dec=7,
             # both days
-            use_second_inbound=False,
+            use_second_inbound=True,
         ),
     ]
 
