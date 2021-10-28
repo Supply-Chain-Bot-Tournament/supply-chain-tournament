@@ -78,8 +78,9 @@ Do NOT modify any other files.
 ## Submitting to the Leaderboard
 
 In order to participate in the tournament, you should follow these steps:
-1. Once you're happy with the developed strategy, post your changes to a new branch in this repository  to trigger the evaluation and open a PR with name "Team your_teamname" to merge to `master`
-2. GitHub Actions will take care of evaluating your implementation and post your results to the leaderboard (https://leaderboard-brewyonder.eu.live.external.byp.ai/)
-3. Update your branch as often as you like, but be aware that the most recent results will be updated to the leaderboard, irrespectively of the result
+1. Request write-access to this repo by reaching out to the organizers of this event in the [PyData Global 2021 Slack Channel](https://pydataglobal.slack.com/archives/C02HQ7G0QAJ). They will add you to a team within the [Supply-Chain-Bot-Tournament](https://github.com/orgs/Supply-Chain-Bot-Tournament/teams) organization. Please check your emails for an invitation and join the team to be granted write-access.
+2. Once you're happy with your developed strategy, post your changes to a new branch in this repository  to trigger the evaluation and open a PR with name "Team your_teamname" to merge to `master`
+3. GitHub Actions will take care of evaluating your implementation and post your results to the leaderboard (https://leaderboard-brewyonder.eu.live.external.byp.ai/)
+4. Update your branch as often as you like, but be aware that the most recent results will be updated to the leaderboard, irrespectively of the result
 
 Good luck and have fun!
