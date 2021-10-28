@@ -197,7 +197,7 @@ def run() -> float:
         run_game(create_agents(), verbose=False, seed=seed)
         for seed in seeds
     ]
-    return min(total_costs)
+    return sum(total_costs)/len(total_costs)
 
 
 def run_game(
@@ -228,7 +228,9 @@ def get_seeds() -> Optional[List[int]]:
     if not string:
         return None
     try:
-        return [int(x) for x in string.split(",")]
+        seeds = [int(x) for x in string.split(",")]
+        print(f"Found {len(seeds)} seeds, will do {len(seeds)} runs and average")
+        return seeds
     except TypeError:
         raise RuntimeError(f"wrong seed format: {string}; should be a comma-separated list")
 
@@ -245,8 +247,6 @@ def main(args):
 
     if args.submit:
         # get total costs and post results to leaderboard api
-        score_list = [run() for i in range(1, 21)]
-        score = sum(score_list)/ len(score_list)
         write_result_to_file(score=score, filename="result.txt")
         post_score_to_api(score=score, user=args.user)
 
