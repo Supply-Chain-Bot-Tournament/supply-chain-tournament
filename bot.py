@@ -70,11 +70,13 @@ class BaseVendor:
         self.vendor = 0
         self.num_orders = 5
         self.min_order = 6
+        self.emergency = 3
 
     def get_action(self, step_state: dict) -> int:
         # Save Order history
         self.orders.append(step_state["next_incoming_order"])
         self.stock.append(step_state["current_stock"])
+
 
         recent_stock = self.stock[-min(len(self.stock), self.num_orders):]
         slope, intercept, _, _, _ = stats.linregress(list(range(len(recent_stock))), recent_stock)
@@ -83,6 +85,13 @@ class BaseVendor:
         if step_state["turn"] > self.vendor:
             next_order = max(self.min_order, self.orders[-1]) + (slope < 0 and self.stock[-1] < 7)
 
+        if self.stock[-1] < 0:
+            if self.emergency == 3:
+                next_order += self.stock[-1] + 1
+            self.emergency -= 1
+        if self.emergency == 0:
+            self.emergency = 3
+            
         return int(max(self.min_order, next_order))  # provide your implementation here
 
 
