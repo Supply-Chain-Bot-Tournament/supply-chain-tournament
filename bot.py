@@ -69,7 +69,7 @@ class BaseVendor:
         self.stock = []
         self.vendor = 0
         self.delay = 3
-        self.num_orders = 5
+        self.num_orders = 7
         self.min_order = 6
         self.emergency = self.delay
 
@@ -80,15 +80,19 @@ class BaseVendor:
 
 
         recent_stock = self.stock[-min(len(self.stock), self.num_orders):]
+        recent_orders = self.orders[-min(len(self.orders), self.num_orders):]
         slope, intercept, _, _, _ = stats.linregress(list(range(len(recent_stock))), recent_stock)
 
         next_order = self.orders[-1]
-        if step_state["turn"] > self.vendor:
-            next_order = max(self.min_order, self.orders[-1]) + (slope < 0 and self.stock[-1] < 7) - (slope > 0 and self.stock[-1] > 10)
+        if step_state["turn"] > (self.vendor-1):
+            projection = self.stock[-1] + sum(step_state["inbound_shipments"]) - np.median(recent_orders)*2
+            low_correction = (slope < 0 and projection < 8)
+            high_correction = projection > 11
+            next_order = max(self.min_order, self.orders[-1]) + low_correction - high_correction
 
-        if self.stock[-1] < 0:
+        if self.stock[-1] < 1:
             if self.emergency == self.delay:
-                next_order += self.stock[-1] + 1
+                next_order += self.stock[-1] + slope + 1
             self.emergency -= 1
         if self.emergency == 0:
             self.emergency = self.delay
@@ -198,7 +202,7 @@ def main(args):
         seeds = range(200)
         
         all_costs = [run_game(create_agents(), verbose=False, seed=seed) for seed in seeds]
-        
+        run()
         total_costs = np.median(all_costs)
 
         #print(all_costs)
