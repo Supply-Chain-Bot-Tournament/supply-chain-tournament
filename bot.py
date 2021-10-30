@@ -45,14 +45,14 @@ from supply_chain_env.leaderboard import post_score_to_api, write_result_to_file
 class Agent:
     def __init__(
         self,
-        inbound_shipments_first_below=15,
-        inbound_shipments_second_below=0,
-        inbound_shipments_first_above=30,
-        inbound_shipments_second_above=0,
-        inbound_shipments_orders_inc=5,
-        inbound_shipments_orders_dec=5,
-        use_second_inbound=False,
-        min_flow=0,
+        inbound_shipments_first_below=6,
+        inbound_shipments_second_below=2,
+        inbound_shipments_first_above=10,
+        inbound_shipments_second_above=1,
+        inbound_shipments_orders_inc=1,
+        inbound_shipments_orders_dec=1,
+        use_second_inbound=True,
+        min_flow=7,
     ):
         self.inbound_shipments_first_below = inbound_shipments_first_below
         self.inbound_shipments_second_below = inbound_shipments_second_below
@@ -90,19 +90,13 @@ class Agent:
             step_state["current_stock"]
             - order_to_place
             + step_state["inbound_shipments"][0]
+            # if self.use_second_inboud, add also step_state["inbound_shipments"][1]
+            + self.use_second_inboud * step_state["inbound_shipments"][1]
         )
-        if self.use_second_inboud:
-            expectation += step_state["inbound_shipments"][1]
 
-        if (
-            expectation
-            < self.inbound_shipments_first_below + self.inbound_shipments_second_below
-        ):
+        if expectation < self.inbound_shipments_first_below + self.inbound_shipments_second_below:
             order_to_place += self.inbound_shipments_orders_inc
-        if (
-            expectation
-            > self.inbound_shipments_first_above + self.inbound_shipments_second_above
-        ):
+        if expectation > self.inbound_shipments_first_above + self.inbound_shipments_second_above:
             order_to_place -= self.inbound_shipments_orders_dec
 
         return max(order_to_place, self.min_flow)
@@ -120,24 +114,12 @@ def parse_experiment(params_string):
     params = {}
 
     params["use_second_inbound"] = int(params_string.split("_")[0]) > 1
-    params["inbound_shipments_first_below"] = int(
-        params_string.split("+")[0].split("(")[1]
-    )
-    params["inbound_shipments_second_below"] = int(
-        params_string.split(")")[0].split("+")[1]
-    )
-    params["inbound_shipments_orders_inc"] = int(
-        params_string.split("_>")[0].split(")+")[1]
-    )
-    params["inbound_shipments_first_above"] = int(
-        params_string.split(">(")[1].split("+")[0]
-    )
-    params["inbound_shipments_second_above"] = int(
-        params_string.split("+")[3].split(")")[0]
-    )
-    params["inbound_shipments_orders_dec"] = int(
-        params_string.split("-")[1].split("_")[0]
-    )
+    params["inbound_shipments_first_below"] = int(params_string.split("+")[0].split("(")[1])
+    params["inbound_shipments_second_below"] = int(params_string.split(")")[0].split("+")[1])
+    params["inbound_shipments_orders_inc"] = int(params_string.split("_>")[0].split(")+")[1])
+    params["inbound_shipments_first_above"] = int(params_string.split(">(")[1].split("+")[0])
+    params["inbound_shipments_second_above"] = int(params_string.split("+")[3].split(")")[0])
+    params["inbound_shipments_orders_dec"] = int(params_string.split("-")[1].split("_")[0])
     params["min_flow"] = int(params_string.split("min")[1])
 
     return params
@@ -149,27 +131,9 @@ def create_agents(params=None) -> List:
     Note that the order of agents is important here. It is always considered by the environment that the first
     agent is Retailer, the second one is Wholesaler, etc.
     """
-    if params is not None:
-        # e.g. "2_<(3+1)+1_>(7+1)-1_min7"
-        params = parse_experiment(params)
+    params = parse_experiment(params) if params is not None else {}
 
-    else:
-        params = dict(
-            inbound_shipments_first_below=15,
-            inbound_shipments_second_below=0,
-            inbound_shipments_first_above=30,
-            inbound_shipments_second_above=0,
-            inbound_shipments_orders_inc=5,
-            inbound_shipments_orders_dec=5,
-            use_second_inbound=False,
-            min_flow=0,
-        )
-    return [
-        Retailer(**params),
-        Wholesaler(**params),
-        Distributor(**params),
-        Manufacturer(**params),
-    ]
+    return [Retailer(**params), Wholesaler(**params), Distributor(**params), Manufacturer(**params)]
 
 
 def run(verbose_sim=True, params=None) -> float:
@@ -182,10 +146,7 @@ def run(verbose_sim=True, params=None) -> float:
     if seeds is None:
         # single run
         return run_game(create_agents(params=params), verbose=verbose_sim)
-    total_costs = [
-        run_game(create_agents(params=params), verbose=False, seed=seed)
-        for seed in seeds
-    ]
+    total_costs = [run_game(create_agents(params=params), verbose=False, seed=seed) for seed in seeds]
     return sum(total_costs) / len(total_costs)
 
 
@@ -221,9 +182,7 @@ def get_seeds() -> Optional[List[int]]:
         print(f"Found {len(seeds)} seeds, will do {len(seeds)} runs and average")
         return seeds
     except TypeError:
-        raise RuntimeError(
-            f"wrong seed format: {string}; should be a comma-separated list"
-        )
+        raise RuntimeError(f"wrong seed format: {string}; should be a comma-separated list")
 
 
 def parse_args():
