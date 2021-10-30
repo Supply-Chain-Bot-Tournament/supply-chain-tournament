@@ -84,7 +84,7 @@ class BaseVendor:
 
         next_order = self.orders[-1]
         if step_state["turn"] > self.vendor:
-            next_order = max(self.min_order, self.orders[-1]) + (slope < 0 and self.stock[-1] < 7)
+            next_order = max(self.min_order, self.orders[-1]) + (slope < 0 and self.stock[-1] < 7) - (slope > 0 and self.stock[-1] > 10)
 
         if self.stock[-1] < 0:
             if self.emergency == self.delay:
@@ -185,12 +185,24 @@ def parse_args():
 
 
 def main(args):
+
     score = run()
 
     if args.submit:
         # get total costs and post results to leaderboard api
         write_result_to_file(score=score, filename="result.txt")
         post_score_to_api(score=score, user=args.user)
+    else:
+        all_costs = []
+
+        seeds = range(200)
+        
+        all_costs = [run_game(create_agents(), verbose=False, seed=seed) for seed in seeds]
+        
+        total_costs = np.median(all_costs)
+
+        #print(all_costs)
+        print(f"Overall total costs. Median: {np.median(all_costs)}, Mean: {np.mean(all_costs)}, Std: {np.std(all_costs):.2f}")
 
 
 if __name__ == "__main__":
