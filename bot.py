@@ -69,7 +69,7 @@ class BaseVendor:
         self.stock = []
         self.vendor = 0
         self.delay = 3
-        self.num_orders = 7
+        self.num_orders = 10
         self.min_order = 6
         self.emergency = self.delay
 
@@ -85,9 +85,9 @@ class BaseVendor:
 
         next_order = self.orders[-1]
         if step_state["turn"] > (self.vendor-1):
-            projection = self.stock[-1] + sum(step_state["inbound_shipments"]) - np.median(recent_orders)*2
-            low_correction = (slope < 0 and projection < 8)
-            high_correction = projection > 11
+            projection = self.stock[-1] + sum(step_state["inbound_shipments"])//2 - np.median(recent_orders)
+            low_correction = (slope < 1 and projection < 9)
+            high_correction = projection > 12
             next_order = max(self.min_order, self.orders[-1]) + low_correction - high_correction
 
         if self.stock[-1] < 1:
@@ -103,22 +103,22 @@ class BaseVendor:
 class Retailer(BaseVendor):
     def __init__(self):
         super().__init__()
+        self.vendor = 3
 
 
 class Wholesaler(BaseVendor):
     def __init__(self):
         super().__init__()
-        self.vendor = 1
+        self.vendor = 2
 
 class Distributor(BaseVendor):
     def __init__(self):
         super().__init__()
-        self.vendor = 2
+        self.vendor = 1
 
 class Manufacturer(BaseVendor):
     def __init__(self):
         super().__init__()
-        self.vendor = 3
 
 
 
