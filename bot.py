@@ -52,6 +52,7 @@ class Agent:
         inbound_shipments_orders_inc=5,
         inbound_shipments_orders_dec=5,
         use_second_inbound=False,
+        min_flow=0,
     ):
         self.inbound_shipments_first_below = inbound_shipments_first_below
         self.inbound_shipments_second_below = inbound_shipments_second_below
@@ -60,6 +61,7 @@ class Agent:
         self.inbound_shipments_orders_inc = inbound_shipments_orders_inc
         self.inbound_shipments_orders_dec = inbound_shipments_orders_dec
         self.use_second_inboud = use_second_inbound
+        self.min_flow = min_flow
 
     def get_action(self, step_state: dict) -> int:
         """
@@ -84,7 +86,11 @@ class Agent:
         # TODO provide your implementation here:
         order_to_place = step_state["next_incoming_order"]
 
-        expectation = step_state["current_stock"] + step_state["inbound_shipments"][0]
+        expectation = (
+            step_state["current_stock"]
+            - order_to_place
+            + step_state["inbound_shipments"][0]
+        )
         if self.use_second_inboud:
             expectation += step_state["inbound_shipments"][1]
 
@@ -99,89 +105,74 @@ class Agent:
         ):
             order_to_place -= self.inbound_shipments_orders_dec
 
-        return max(order_to_place, 0)
+        return max(order_to_place, self.min_flow)
 
 
-class Retailer(Agent):
-    name = "retailer"
-
-
-class Wholesaler(Agent):
-    name = "wholesaler"
-
-
-class Distributor(Agent):
-    name = "distributor"
-
-
-class Manufacturer(Agent):
-    name = "manufacturer"
-
+Retailer = Wholesaler = Distributor = Manufacturer = Agent
 
 # -------------------------------------------------------------
 # Game setup and utils. DO NOT MODIFY ANYTHING BELOW THIS LINE!
 # -------------------------------------------------------------
 
 
-def create_agents() -> List:
+def parse_experiment(params_string):
+    # e.g. "2_<(3+1)+1_>(7+1)-1_min7"
+    params = {}
+
+    params["use_second_inbound"] = int(params_string.split("_")[0]) > 1
+    params["inbound_shipments_first_below"] = int(
+        params_string.split("+")[0].split("(")[1]
+    )
+    params["inbound_shipments_second_below"] = int(
+        params_string.split(")")[0].split("+")[1]
+    )
+    params["inbound_shipments_orders_inc"] = int(
+        params_string.split("_>")[0].split(")+")[1]
+    )
+    params["inbound_shipments_first_above"] = int(
+        params_string.split(">(")[1].split("+")[0]
+    )
+    params["inbound_shipments_second_above"] = int(
+        params_string.split("+")[3].split(")")[0]
+    )
+    params["inbound_shipments_orders_dec"] = int(
+        params_string.split("-")[1].split("_")[0]
+    )
+    params["min_flow"] = int(params_string.split("min")[1])
+
+    return params
+
+
+def create_agents(params=None) -> List:
     """Creates a list of agents acting in the environment.
 
     Note that the order of agents is important here. It is always considered by the environment that the first
     agent is Retailer, the second one is Wholesaler, etc.
     """
+    if params is not None:
+        # e.g. "2_<(3+1)+1_>(7+1)-1_min7"
+        params = parse_experiment(params)
+
+    else:
+        params = dict(
+            inbound_shipments_first_below=15,
+            inbound_shipments_second_below=0,
+            inbound_shipments_first_above=30,
+            inbound_shipments_second_above=0,
+            inbound_shipments_orders_inc=5,
+            inbound_shipments_orders_dec=5,
+            use_second_inbound=False,
+            min_flow=0,
+        )
     return [
-        Retailer(
-            # first condition
-            inbound_shipments_first_below=4,
-            inbound_shipments_second_below=0,
-            inbound_shipments_orders_inc=2,
-            # second condition
-            inbound_shipments_first_above=8,
-            inbound_shipments_second_above=0,
-            inbound_shipments_orders_dec=2,
-            # both days
-            use_second_inbound=False,
-        ),
-        Wholesaler(
-            # first condition
-            inbound_shipments_first_below=4,
-            inbound_shipments_second_below=0,
-            inbound_shipments_orders_inc=2,
-            # second condition
-            inbound_shipments_first_above=8,
-            inbound_shipments_second_above=0,
-            inbound_shipments_orders_dec=2,
-            # both days
-            use_second_inbound=False,
-        ),
-        Distributor(
-            # first condition
-            inbound_shipments_first_below=4,
-            inbound_shipments_second_below=0,
-            inbound_shipments_orders_inc=2,
-            # second condition
-            inbound_shipments_first_above=8,
-            inbound_shipments_second_above=0,
-            inbound_shipments_orders_dec=2,
-            # both days
-            use_second_inbound=False,
-        ),
-        Manufacturer(
-            # first condition
-            inbound_shipments_first_below=4,
-            inbound_shipments_second_below=0,
-            inbound_shipments_orders_inc=2,
-            # second condition
-            inbound_shipments_first_above=8,
-            inbound_shipments_second_above=0,
-            inbound_shipments_orders_dec=2,
-            # both days
-            use_second_inbound=False,
-        ),
+        Retailer(**params),
+        Wholesaler(**params),
+        Distributor(**params),
+        Manufacturer(**params),
     ]
 
 
-def run(verbose_sim=True) -> float:
+def run(verbose_sim=True, params=None) -> float:
     """Runs supply chain simulation.
 
     When a solution is submitted to the leaderboard, the simulation is executed several times with different (fixed)
@@ -190,9 +181,10 @@ def run(verbose_sim=True) -> float:
     seeds = get_seeds()
     if seeds is None:
         # single run
-        return run_game(create_agents(), verbose=verbose_sim)
+        return run_game(create_agents(params=params), verbose=verbose_sim)
     total_costs = [
-        run_game(create_agents(), verbose=False, seed=seed) for seed in seeds
+        run_game(create_agents(params=params), verbose=False, seed=seed)
+        for seed in seeds
     ]
     return sum(total_costs) / len(total_costs)
 
