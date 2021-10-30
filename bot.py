@@ -68,9 +68,10 @@ class BaseVendor:
         self.orders = []
         self.stock = []
         self.vendor = 0
+        self.delay = 3
         self.num_orders = 5
         self.min_order = 6
-        self.emergency = 3
+        self.emergency = self.delay
 
     def get_action(self, step_state: dict) -> int:
         # Save Order history
@@ -86,12 +87,12 @@ class BaseVendor:
             next_order = max(self.min_order, self.orders[-1]) + (slope < 0 and self.stock[-1] < 7)
 
         if self.stock[-1] < 0:
-            if self.emergency == 3:
+            if self.emergency == self.delay:
                 next_order += self.stock[-1] + 1
             self.emergency -= 1
         if self.emergency == 0:
-            self.emergency = 3
-            
+            self.emergency = self.delay
+
         return int(max(self.min_order, next_order))  # provide your implementation here
 
 
@@ -115,9 +116,6 @@ class Manufacturer(BaseVendor):
         super().__init__()
         self.vendor = 3
 
-    def get_action(self, step_state: dict) -> int:
-        # infinite supply, let's try to minimize the storage cost.
-        return step_state["next_incoming_order"] + 1
 
 
 # -------------------------------------------------------------
