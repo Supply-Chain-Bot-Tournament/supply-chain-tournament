@@ -42,6 +42,10 @@ from supply_chain_env.envs.env import SupplyChainBotTournament
 from supply_chain_env.leaderboard import post_score_to_api, write_result_to_file
 
 
+def simple_demand(step_state: dict) -> int:
+    order_to_place = step_state['next_incoming_order']
+    return max(order_to_place, 7)
+
 class Retailer:
     def get_action(self, step_state: dict) -> int:
         """
@@ -64,14 +68,7 @@ class Retailer:
         the corresponding order
         """
         # TODO provide your implementation here:
-        order_to_place = step_state["next_incoming_order"]
-        if step_state["current_stock"]+step_state["inbound_shipments"][0] < 15:
-            order_to_place += 5
-        if step_state["current_stock"]+step_state["inbound_shipments"][0] > 30:
-            order_to_place -= 5
-
-        return max(order_to_place, 0)
-
+        return simple_demand(step_state)
 
 class Wholesaler:
     def get_action(self, step_state: dict) -> int:
@@ -97,13 +94,13 @@ class Wholesaler:
 
         # TODO provide your implementation here:
 
-        order_to_place = step_state["next_incoming_order"]
-        if step_state["current_stock"]+step_state["inbound_shipments"][0] < 15:
-            order_to_place += 5
-        if step_state["current_stock"]+step_state["inbound_shipments"][0] > 30:
-            order_to_place -= 5
+        # order_to_place = step_state["next_incoming_order"]
+        # if step_state["current_stock"]+step_state["inbound_shipments"][0] < 15:
+        #     order_to_place += 5
+        # if step_state["current_stock"]+step_state["inbound_shipments"][0] > 30:
+        #     order_to_place -= 5
 
-        return max(order_to_place, 0)
+        return simple_demand(step_state)
 
 
 class Distributor:
@@ -128,13 +125,13 @@ class Distributor:
         the corresponding order
         """
         # TODO: provide your implementation here:
-        order_to_place = step_state["next_incoming_order"]
-        if step_state["current_stock"]+step_state["inbound_shipments"][0] < 15:
-            order_to_place += 5
-        if step_state["current_stock"]+step_state["inbound_shipments"][0] > 30:
-            order_to_place -= 5
+        # order_to_place = step_state["next_incoming_order"]
+        # if step_state["current_stock"]+step_state["inbound_shipments"][0] < 15:
+        #     order_to_place += 5
+        # if step_state["current_stock"]+step_state["inbound_shipments"][0] > 30:
+        #     order_to_place -= 5
 
-        return max(order_to_place, 0)
+        return simple_demand(step_state)
 
 
 class Manufacturer:
@@ -159,13 +156,13 @@ class Manufacturer:
         the corresponding order
         """
         # TODO provide your implementation here:
-        order_to_place = step_state["next_incoming_order"]
-        if step_state["current_stock"]+step_state["inbound_shipments"][0] < 15:
-            order_to_place += 5
-        if step_state["current_stock"]+step_state["inbound_shipments"][0] > 30:
-            order_to_place -= 5
+        # order_to_place = step_state["next_incoming_order"]
+        # if step_state["current_stock"]+step_state["inbound_shipments"][0] < 15:
+        #     order_to_place += 5
+        # if step_state["current_stock"]+step_state["inbound_shipments"][0] > 30:
+        #     order_to_place -= 5
 
-        return max(order_to_place, 0)
+        return simple_demand(step_state)
 
 
 # -------------------------------------------------------------
